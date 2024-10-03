@@ -1,5 +1,6 @@
 package linzi.ssm.spring01ioc;
 
+import linzi.ssm.spring01ioc.bean.People;
 import linzi.ssm.spring01ioc.bean.Person;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -41,6 +42,9 @@ public class Spring01IocApplication {
         Map<String, Person> persons = ioc.getBeansOfType(Person.class);
         //5.4 按照名字和类型获取对象。
         Person linzi3 = ioc.getBean("linzi2", Person.class);
+
+        People people = ioc.getBean("people", People.class);
+        System.out.println("peopleFactory: " + people);
     }
 
 }
