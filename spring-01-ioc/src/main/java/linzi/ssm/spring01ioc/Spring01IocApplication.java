@@ -34,21 +34,13 @@ public class Spring01IocApplication {
         //      重复名字的组件，容器只添加第一个对象。
 
         //5.1 按照组件的名字获取对象，需要强转。
-        Person linzi = (Person) ioc.getBean("linzi");
+        Person linzi1 = (Person) ioc.getBean("linzi");
         //5.2 按照组件的类型获取对象，不需要强转但是要保证是唯一的。
-        Person linzi2 = ioc.getBean(Person.class);
+        Person linzi2 = ioc.getBean("linzi", Person.class);
         //5.3 按照类型获取一类对象。
         Map<String, Person> persons = ioc.getBeansOfType(Person.class);
-    }
-
-    @Bean("linzi")
-    //4. 在容器中注册一个自己的组件。
-    public Person person() {
-        Person person = new Person();
-        person.setName("");
-        person.setAge(0);
-        person.setGender("");
-        return person;
+        //5.4 按照名字和类型获取对象。
+        Person linzi3 = ioc.getBean("linzi2", Person.class);
     }
 
 }
