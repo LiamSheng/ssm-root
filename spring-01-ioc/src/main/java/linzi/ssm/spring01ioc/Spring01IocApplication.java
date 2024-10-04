@@ -5,7 +5,7 @@ import linzi.ssm.spring01ioc.bean.Person;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.util.Map;
 
@@ -24,10 +24,10 @@ public class Spring01IocApplication {
         System.out.println("<--------------------------------->");
 
         //3. 获取容器中所有组件的名字。
-//        String[] names = ioc.getBeanDefinitionNames();
-//        for (String name : names) {
-//            System.out.println(name);
-//        }
+        String[] names = ioc.getBeanDefinitionNames();
+        for (String name : names) {
+            System.out.println(name);
+        }
 
         //5. 获取容器中的组建对象。
         // 组件的四大特性：名字，类型，对象和作用域。
@@ -44,7 +44,11 @@ public class Spring01IocApplication {
         Person linzi3 = ioc.getBean("linzi2", Person.class);
 
         People people = ioc.getBean("people", People.class);
-        System.out.println("peopleFactory: " + people);
+        //System.out.println("peopleFactory: " + people);
+
+        // 测试不同 Conditional 容器生成不同组建的方法.
+        ConfigurableEnvironment environment = ioc.getEnvironment();
+        System.out.println("OS -> " + environment.getProperty("OS"));
     }
 
 }
