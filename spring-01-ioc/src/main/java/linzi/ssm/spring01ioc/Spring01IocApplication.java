@@ -2,6 +2,7 @@ package linzi.ssm.spring01ioc;
 
 import linzi.ssm.spring01ioc.bean.People;
 import linzi.ssm.spring01ioc.bean.Person;
+import linzi.ssm.spring01ioc.controller.UserController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -49,6 +50,9 @@ public class Spring01IocApplication {
         // 测试不同 Conditional 容器生成不同组建的方法.
         ConfigurableEnvironment environment = ioc.getEnvironment();
         System.out.println("OS -> " + environment.getProperty("OS"));
+
+        // userController -> {userController=UserController(userService=null)}
+        System.out.println("userController -> " + ioc.getBeansOfType(UserController.class));
     }
 
 }
