@@ -27,8 +27,6 @@ public class PersonConfig {
     public Person linzi2() {
         Person person = new Person();
         person.setName("linzi2");
-        person.setAge(0);
-        person.setGender("");
         return person;
     }
 
