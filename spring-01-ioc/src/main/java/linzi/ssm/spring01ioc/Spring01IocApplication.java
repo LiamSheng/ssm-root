@@ -3,11 +3,19 @@ package linzi.ssm.spring01ioc;
 import linzi.ssm.spring01ioc.bean.People;
 import linzi.ssm.spring01ioc.bean.Person;
 import linzi.ssm.spring01ioc.controller.UserController;
+import linzi.ssm.spring01ioc.dao.DeliveryDao;
+import linzi.ssm.spring01ioc.dao.FamilyDAO;
+import linzi.ssm.spring01ioc.service.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -16,7 +24,7 @@ import java.util.Map;
 @SpringBootApplication
 public class Spring01IocApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         //1. 跑起一个Spring应用。
         //2. ConfigurableApplicationContext extends ApplicationContext，
         //	是Spring应用上下文对象，是一个ioc容器。
@@ -24,13 +32,13 @@ public class Spring01IocApplication {
         System.out.println(ioc);
         System.out.println("<--------------------------------->");
 
-        //3. 获取容器中所有组件的名字。
+        //3. 获取容器中所有组件的名字，此时这些组件没有被实例化。
         String[] names = ioc.getBeanDefinitionNames();
         for (String name : names) {
             System.out.println(name);
         }
 
-        //5. 获取容器中的组建对象。
+        //5. 获取容器中的组建对象，此时容器中的组件被实例化了。
         // 组件的四大特性：名字，类型，对象和作用域。
         //  名字：默认是方法名，但是可以使用 @Bean("新名字") 修改，要求全局唯一。
         //      重复名字的组件，容器只添加第一个对象。
@@ -53,6 +61,18 @@ public class Spring01IocApplication {
 
         // userController -> {userController=UserController(userService=null)}
         System.out.println("userController -> " + ioc.getBeansOfType(UserController.class));
+
+        System.out.println(ioc.getBean(FamilyDAO.class));
+
+        UserService userService = (UserService) ioc.getBean("userService");
+        System.out.println(userService.getOSType() + "---" + userService.getName());
+
+        // 扩展 Spring 获取资源的方式。
+        File file = ResourceUtils.getFile("classpath:person.properties");
+        System.out.println(new FileInputStream(file).available());
+
+        DeliveryDao deliveryDao = (DeliveryDao) ioc.getBean("deliveryDao");
+        deliveryDao.saveDelivery();
     }
 
 }
