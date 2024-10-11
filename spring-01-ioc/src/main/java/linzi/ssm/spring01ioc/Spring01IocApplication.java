@@ -2,6 +2,7 @@ package linzi.ssm.spring01ioc;
 
 import linzi.ssm.spring01ioc.bean.People;
 import linzi.ssm.spring01ioc.bean.Person;
+import linzi.ssm.spring01ioc.bean.User;
 import linzi.ssm.spring01ioc.controller.UserController;
 import linzi.ssm.spring01ioc.dao.DeliveryDao;
 import linzi.ssm.spring01ioc.dao.FamilyDAO;
@@ -73,6 +74,9 @@ public class Spring01IocApplication {
 
         DeliveryDao deliveryDao = (DeliveryDao) ioc.getBean("deliveryDao");
         deliveryDao.saveDelivery();
+
+        User user = ioc.getBean("user", User.class);
+        System.out.println("运行中的user：" + user);
     }
 
 }
