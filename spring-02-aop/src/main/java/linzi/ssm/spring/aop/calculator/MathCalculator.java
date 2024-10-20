@@ -1,6 +1,6 @@
 package linzi.ssm.spring.aop.calculator;
 
-public interface MatchCalculator {
+public interface MathCalculator {
 
     int add(int a, int b);
 
