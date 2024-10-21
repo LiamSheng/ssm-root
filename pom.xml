@@ -20,6 +20,7 @@
     <!-- 聚合统一管理，可以在Maven侧边工具栏的父工程下看到子模块-->
     <modules>
         <module>spring-01-ioc</module>
+        <module>spring-02-aop</module>
     </modules>
 
 </project>
