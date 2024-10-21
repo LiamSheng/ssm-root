@@ -90,7 +90,8 @@ class Spring02AopApplicationTests {
      */
     @Test
     void testAOP() {
-            mathCalculator.add(1, 2);
+        mathCalculator.add(1, 2);
+        mathCalculator.divide(2, 0);
     }
 
 }
