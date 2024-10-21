@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 @Order(1)// 数字越小, 优先级越高, 默认是按照类名字母顺序排序.
-@Component
+//@Component
 @Aspect// 表明这是一个 Spring 的切面类.
 public class LogAspect {
 
@@ -27,6 +27,8 @@ public class LogAspect {
      *  @AfterThrowing, 方法抛出异常时,
      *  @After, 方法执行之后.
      *
+     *  @Around, 环绕通知, 可以控制目标方法是否执行, 修改目标方法执行的结果.
+     *
      * 何地?
      *  切入点表达式:
      *      execution(方法的全签名)
@@ -36,7 +38,6 @@ public class LogAspect {
      *              * 任意字符.
      *              .. 多个参数, 任意类型.
      *              * *(..) 最省略, 最通配.
-     *
      *  通知方法的执行顺序:
      *      1. 正常链路: @Before -> 目标方法 -> @AfterReturn -> @After.
      *      2. 异常链路: @Before -> 目标方法 -> @AfterThrowing -> @After.
@@ -48,23 +49,23 @@ public class LogAspect {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature(); // 拿到方法的全签名.
         String methodName = signature.getName();// 获取方法名.
         Object[] args = joinPoint.getArgs();// 目标方法传来的参数的值.
-        System.out.println("[切面-日志] logStart... "+ methodName + Arrays.asList(args));
+        System.out.println("[切面-日志1] logStart... "+ methodName + Arrays.asList(args));
     }
 
     @After(value = "pointCut()")
     public void logEnd(JoinPoint joinPoint) {
-        System.out.println("[切面-日志] logEnd..." + joinPoint.getSignature().getName());
+        System.out.println("[切面-日志1] logEnd..." + joinPoint.getSignature().getName());
     }
 
     @AfterReturning(value = "pointCut()", returning = "result")
     public void logReturn(JoinPoint joinPoint, Object result) {
-        System.out.println("[切面-日志] logReturn..." + result);
+        System.out.println("[切面-日志1] logReturn..." + result);
     }
 
     @AfterThrowing(value = "pointCut()", throwing = "e")
     public void logException(JoinPoint joinPoint, Throwable e) {
         // 如果指明了 e 是某一种异常, 则不一定会除触发这个切面方法.
-        System.out.println("[切面-日志] logException..." + joinPoint.getSignature().getName() + e.getMessage());
+        System.out.println("[切面-日志1] logException..." + joinPoint.getSignature().getName() + e.getMessage());
     }
 
 }
