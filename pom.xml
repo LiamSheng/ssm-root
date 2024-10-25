@@ -21,6 +21,7 @@
     <modules>
         <module>spring-01-ioc</module>
         <module>spring-02-aop</module>
+        <module>spring-03-transaction</module>
     </modules>
 
 </project>
