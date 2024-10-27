@@ -32,8 +32,13 @@ class Spring03TransactionApplicationTests {
     UserService userService;
 
     @Test
-    void testCheckout() {
-        userService.checkout("zhangsan", 1, 3);
+    void testGetBookPriceById() {
+        System.out.println(bookDao.getBookPriceById(4));
+    }
+
+    @Test
+    void testCheckout() throws InterruptedException {
+        userService.checkout("wangwu", 2, 4);
     }
 
     @Test
