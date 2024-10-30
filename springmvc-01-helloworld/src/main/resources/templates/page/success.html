@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flower Bloom Success</title>
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            font-family: Arial, sans-serif;
+            flex-direction: column; /* 添加这一行使元素垂直排列 */
+        }
+
+        .center-text {
+            z-index: 1;
+            font-size: 3em;
+            text-align: center;
+        }
+
+        .sub-text {
+            z-index: 1;
+            font-size: 2em;
+            text-align: center;
+        }
+
+        .table-container {
+            z-index: 1;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .flower {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: white;
+            opacity: 0.8;
+            animation: bloom 2s infinite;
+        }
+
+        @keyframes bloom {
+            0% {
+                transform: scale(0);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="center-text">Success!</div>
+<!--tx:xx 语法: 可以修改标签的任意值-->
+<div class="sub-text">Name: <span th:text="${name}" th:id="${age}"></span></div>
+<div class="sub-text">Age: [[${age}]]</div>
+<div class="table-container">
+    <table>
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>用户名</th>
+            <th>年龄</th>
+            <th>未成年?</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="visitor : ${visitors}">
+            <td>[[${visitor.id}]]</td>
+            <td th:text="${visitor.name}"></td>
+            <td th:text="${visitor.age}"></td>
+<!--            <td th:if="${visitor.getAge() >= 18}">成年人</td>-->
+<!--            <td th:if="${visitor.getAge() < 18}">未成年人</td>-->
+            <td th:text="${visitor.getAge() >= 18? '是的' : '不是'}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div id="flowers"></div>
+
+<script>
+    const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff', '#ffffff', '#ff8000'];
+    const numFlowers = 20;
+
+    function createFlower() {
+        const flower = document.createElement('div');
+        flower.className = 'flower';
+        flower.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        flower.style.top = Math.random() * 100 + 'vh';
+        flower.style.left = Math.random() * 100 + 'vw';
+        document.getElementById('flowers').appendChild(flower);
+
+        setTimeout(() => {
+            flower.remove();
+            createFlower();
+        }, 2000);
+    }
+
+    for (let i = 0; i < numFlowers; i++) {
+        createFlower();
+    }
+</script>
+</body>
+</html>
