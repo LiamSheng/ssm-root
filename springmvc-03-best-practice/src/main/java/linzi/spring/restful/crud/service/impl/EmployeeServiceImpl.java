@@ -2,6 +2,8 @@ package linzi.spring.restful.crud.service.impl;
 
 import linzi.spring.restful.crud.bean.Employee;
 import linzi.spring.restful.crud.dao.EmployeeDao;
+import linzi.spring.restful.crud.exception.BusinessException;
+import linzi.spring.restful.crud.exception.BusinessExceptionEnum;
 import linzi.spring.restful.crud.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -69,7 +71,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void updateEmployee(Employee employee) {
         // 判空处理, 否则更新时会将原有的值设置为 null.
-        if (employee.getId() == null) return;
+        if (employee.getId() == null) {
+            // 中断业务的时候, 要抛出异常, 通过异常机制让上层感知到业务终止的原因.
+            throw new BusinessException(BusinessExceptionEnum.USER_UPDATE_FAIL);
+        }
+
         Employee employeeGetById = this.employeeDao.getEmployeeById(employee.getId().intValue());
 
         // 只用页面带来的值覆盖原来的值, 否则保持原来的值.
