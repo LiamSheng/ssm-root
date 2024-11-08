@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum BusinessExceptionEnum {
-
     // 订单模块（1xxxx）
     ORDER_CLOSED(10001, "订单已关闭"),
     ORDER_NOT_FOUND(10002, "订单不存在"),

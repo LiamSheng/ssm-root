@@ -1,12 +1,18 @@
 package linzi.spring.restful.crud.controller;
 
+import jakarta.validation.Valid;
 import linzi.spring.restful.crud.bean.Employee;
 import linzi.spring.restful.crud.common.R;
 import linzi.spring.restful.crud.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 复杂的跨域服务器会发送两个请求:
@@ -56,15 +62,33 @@ public class EmployeeRESTController {
     }
 
     @PostMapping("/employee")
-    public R<Employee> addEmployee(@RequestBody Employee employee) {
+    public R<Employee> addEmployee(@RequestBody @Validated Employee employee) {
         employeeService.saveEmployee(employee);
         return R.ok();
     }
 
+    /**
+     * 没有使用全局异常处理器处理验证异常的情况.
+     */
     @PutMapping("/employee")
-    public R<Employee> updateEmployee(@RequestBody Employee employee) {
+    public R<Object> updateEmployee(@RequestBody @Validated Employee employee) {
+//        if (!bindingResult.hasErrors()) {
+        System.out.println("updateEmployee...");
         employeeService.updateEmployee(employee);
         return R.ok();
+//        }
+//        else {
+//            Map<String, String> errors = new HashMap<String, String>();
+//            // 拿到所有属性错误的信息.
+//            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+//                // 获取属性名
+//                String field = fieldError.getField();
+//                // 获取错误信息
+//                String defaultMessage = fieldError.getDefaultMessage();
+//                errors.put(field, defaultMessage);
+//            }
+//            return R.error(500, "校验失败", errors);
+//        }
     }
 
     @GetMapping(value = "/employees")
