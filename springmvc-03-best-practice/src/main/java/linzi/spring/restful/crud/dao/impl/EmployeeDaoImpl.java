@@ -39,14 +39,16 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public void addEmployee(Employee employee) {
-        String sql = "INSERT INTO employee (name, age, email, gender, address, salary) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO employee (name, age, email, gender, address, salary, birth) " +
+                "VALUES (?, ?, ?, ?, ?, ? ,?)";
         int updatedRaws = jdbcTemplate.update(sql,
                 employee.getName(),
                 employee.getAge(),
                 employee.getEmail(),
                 employee.getGender(),
                 employee.getAddress(),
-                employee.getSalary());
+                employee.getSalary(),
+                employee.getBirth());
         System.out.println("added " + updatedRaws + " row(s).");
     }
 

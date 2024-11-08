@@ -4,15 +4,22 @@ import jakarta.validation.Valid;
 import linzi.spring.restful.crud.bean.Employee;
 import linzi.spring.restful.crud.common.R;
 import linzi.spring.restful.crud.service.EmployeeService;
+import linzi.spring.restful.crud.vo.req.EmployeeAddVO;
+import linzi.spring.restful.crud.vo.req.EmployeeUpdateVO;
+import linzi.spring.restful.crud.vo.resp.EmployeeRespVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 复杂的跨域服务器会发送两个请求:
@@ -62,8 +69,20 @@ public class EmployeeRESTController {
     }
 
     @PostMapping("/employee")
-    public R<Employee> addEmployee(@RequestBody @Validated Employee employee) {
-        employeeService.saveEmployee(employee);
+    public R<EmployeeAddVO> addEmployee(@RequestBody @Validated EmployeeAddVO employeeVO) {
+        // 将获取前端数据并封装起来的 VO 对象, 转换为直接和数据库操作的 DO 对象.
+        Employee employeeDO = new Employee();
+//        employeeDO.setId(employeeVO.getId());
+//        employeeDO.setName(employeeVO.getName());
+//        employeeDO.setAge(employeeVO.getAge());
+//        employeeDO.setEmail(employeeVO.getEmail());
+//        employeeDO.setGender(employeeVO.getGender());
+//        employeeDO.setAddress(employeeVO.getAddress());
+//        employeeDO.setSalary(employeeVO.getSalary());
+
+        // Spring 提供了专门的工具转换对象. 属性对拷.
+        BeanUtils.copyProperties(employeeVO, employeeDO);
+        employeeService.saveEmployee(employeeDO);
         return R.ok();
     }
 
@@ -71,10 +90,12 @@ public class EmployeeRESTController {
      * 没有使用全局异常处理器处理验证异常的情况.
      */
     @PutMapping("/employee")
-    public R<Object> updateEmployee(@RequestBody @Validated Employee employee) {
+    public R<Object> updateEmployee(@RequestBody @Validated EmployeeUpdateVO employeeUpdateVO) {
 //        if (!bindingResult.hasErrors()) {
         System.out.println("updateEmployee...");
-        employeeService.updateEmployee(employee);
+        Employee employeeDO = new Employee();
+        BeanUtils.copyProperties(employeeUpdateVO, employeeDO);
+        employeeService.updateEmployee(employeeDO);
         return R.ok();
 //        }
 //        else {
@@ -92,9 +113,16 @@ public class EmployeeRESTController {
     }
 
     @GetMapping(value = "/employees")
-    public R<List<Employee>> getAllEmployees() {
+    public R<List<EmployeeRespVO>> getAllEmployees() {
         List<Employee> employees = employeeService.getAllEmployees();
-        return R.ok(employees);
+
+        List<EmployeeRespVO> collect = employees.stream().map(employee -> {
+            EmployeeRespVO employeeRespVO = new EmployeeRespVO();
+            BeanUtils.copyProperties(employee, employeeRespVO);
+            return employeeRespVO;
+        }).collect(Collectors.toList());
+
+        return R.ok(collect);
     }
 
 }

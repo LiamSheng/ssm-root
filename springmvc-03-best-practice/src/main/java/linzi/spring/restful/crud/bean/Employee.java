@@ -1,31 +1,34 @@
 package linzi.spring.restful.crud.bean;
 
-import jakarta.validation.constraints.*;
-import linzi.spring.restful.crud.annotation.DIYGender;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.util.Date;
+
+/**
+ * 这是直接和数据库交互的 Java bean, 不需要任何注解.
+ * 将前端传来的值做封装以及数据校验的工作归给 VO 层的 EmployeeAddVO.
+ * 同时需要将 VO 转化为能和数据库交互的此对象.
+ * 和数据库交互的类不需要做数据校验. 因为那是其他 VO 的事情.
+ */
 @Data
 public class Employee {
+
     private Long id;         // 主键
 
     private String name;     // 员工名字
 
-    @NotNull
-    @Max(value=150, message = "最大年龄150")
-    @Min(value=18, message = "最小年龄18岁")
     private Integer age;     // 年龄
 
-//    @Email(message = "错误的email格式!")
-    @Email
     private String email;    // 邮箱
 
-//    @Pattern(regexp = "^男|女$", message = "Male/Female")
-    @DIYGender(message = "{my-gender.message}")
     private String gender;   // 性别
 
     private String address;  // 住址
 
     private Double salary;   // 薪资
+
+    private Date birth;  // 生日
 
 }
 
