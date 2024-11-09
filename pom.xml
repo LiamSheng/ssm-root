@@ -23,6 +23,8 @@
         <module>spring-02-aop</module>
         <module>spring-03-transaction</module>
         <module>springmvc-01-helloworld</module>
+        <module>springmvc-02-restful-crud</module>
+        <module>springmvc-03-best-practice</module>
     </modules>
 
 </project>
