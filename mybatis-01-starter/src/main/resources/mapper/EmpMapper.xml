@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="linzi.mybatis.starter.dao.EmpMapper">
+<!--namespace: 编写 mapper 接口的全类名, 代表这个 xml 文件与这个 mapper 接口绑定.-->
+
+<!--
+    Emp getEmpById(int id);
+    <select> 标签表示一次查询.
+        id: 绑定方法名.
+        resultType: 返回值类型
+-->
+    <select id="getEmpById" resultType="linzi.mybatis.starter.bean.Emp">
+        SELECT id,
+               age,
+               emp_name   AS empName,
+               emp_salary AS empSalary
+        FROM t_emp
+        WHERE id = #{id};
+    </select>
+</mapper>

@@ -25,6 +25,7 @@
         <module>springmvc-01-helloworld</module>
         <module>springmvc-02-restful-crud</module>
         <module>springmvc-03-best-practice</module>
+        <module>mybatis-01-starter</module>
     </modules>
 
 </project>
