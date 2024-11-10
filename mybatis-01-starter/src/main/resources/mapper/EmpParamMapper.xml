@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="linzi.mybatis.starter.mapper.EmpParamMapper">
+    <insert id="addEmp">
+        INSERT INTO t_emp(emp_name, age)
+        VALUES (#{empName}, #{age})
+    </insert>
+    <select id="getEmpMap" resultType="linzi.mybatis.starter.bean.Emp">
+        SELECT *
+        FROM ${tableName}
+        WHERE id = 1;
+    </select>
+    <select id="getEmpById" resultType="linzi.mybatis.starter.bean.Emp">
+        SELECT *
+        FROM t_emp
+        WHERE id = #{id};
+    </select>
+    <select id="getTheSecondEmpByIdList" resultType="linzi.mybatis.starter.bean.Emp">
+        SELECT *
+        FROM t_emp
+        WHERE id = #{idList[1]}
+    </select>
+    <select id="getEmpByNameAndId" resultType="linzi.mybatis.starter.bean.Emp">
+        SELECT *
+        FROM t_emp
+        WHERE emp_name = #{name}
+          AND id = #{id}
+    </select>
+    <select id="getEmpByNameAndAge" resultType="linzi.mybatis.starter.bean.Emp">
+        SELECT *
+        FROM t_emp
+        WHERE emp_name = #{pName}
+          AND age = #{pAge}
+    </select>
+    <select id="getEmpByEverything" resultType="linzi.mybatis.starter.bean.Emp">
+        SELECT *
+        FROM t_emp
+        WHERE id = #{pId}
+          AND emp_name = #{pName.nameFromMap}
+          AND age = #{pAge[1]}
+          AND emp_salary = #{pSalary.empSalary}
+    </select>
+</mapper>
