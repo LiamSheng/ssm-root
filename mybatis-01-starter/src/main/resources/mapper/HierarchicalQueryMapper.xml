@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="linzi.mybatis.starter.mapper.HierarchicalQueryMapper">
+    <resultMap id="GetCustomerRM" type="linzi.mybatis.starter.bean.Customer">
+        <id property="id" column="id"/>
+        <result property="customerName" column="customer_name"/>
+        <result property="phone" column="phone"/>
+    </resultMap>
+    <select id="getCustomerById" resultMap="GetCustomerRM">
+        SELECT *
+        FROM t_customer
+        WHERE id = #{id}
+    </select>
+    <resultMap id="GetAllOrdersRM" type="linzi.mybatis.starter.bean.Order">
+        <id column="id" property="id"/>
+        <result column="address" property="address"/>
+        <result column="amount" property="amount"/>
+        <result column="customer_id" property="customerId"/>
+    </resultMap>
+    <select id="getAllOrders" resultMap="GetAllOrdersRM">
+        SELECT *
+        FROM t_order
+        WHERE customer_id = #{id}
+    </select>
+    <resultMap id="GetCustomerAndAllOrdersByIdRM" type="linzi.mybatis.starter.bean.Customer">
+        <id property="id" column="id"/>
+        <result property="customerName" column="customer_name"/>
+        <result property="phone" column="phone"/>
+        <collection property="orders"
+                    ofType="linzi.mybatis.starter.bean.Order"
+                    select="linzi.mybatis.starter.mapper.HierarchicalQueryMapper.getAllOrders"
+                    column="id">
+            <!-- column="id" 指明找到的 customer 的 id "传递"给 customer_id, 供 getCustomerById 继续查找下去... -->
+            <!-- column="{c_id=id, name=customer_name}" 用于多参数的传递 -->
+            <id column="customer_id" property="id"/>
+            <result column="address" property="address"/>
+            <result column="amount" property="amount"/>
+            <result column="customer_id=id" property="customerId"/>
+        </collection>
+    </resultMap>
+    <select id="getCustomerAndAllOrdersById" resultMap="GetCustomerAndAllOrdersByIdRM">
+        SELECT *
+        FROM t_customer
+        WHERE id = #{id}
+    </select>
+    <resultMap id="GetOrderByIdAndCustomerRM" type="linzi.mybatis.starter.bean.Order">
+        <id column="id" property="id"/>
+        <result column="address" property="address"/>
+        <result column="amount" property="amount"/>
+        <result column="customer_id" property="customerId"/>
+        <association property="customer"
+                     javaType="linzi.mybatis.starter.bean.Customer"
+                     select="linzi.mybatis.starter.mapper.HierarchicalQueryMapper.getCustomerById"
+                     column="id=customer_id">
+            <id column="c_id" property="id"/>
+            <result column="customer_name" property="customerName"/>
+            <result column="phone" property="phone"/>
+        </association>
+    </resultMap>
+    <select id="getOrderByIdAndCustomer" resultMap="GetOrderByIdAndCustomerRM">
+        SELECT *
+        FROM t_order
+        WHERE id = #{id}
+    </select>
+    <select id="getAllCustomers" resultType="linzi.mybatis.starter.bean.Customer">
+        SELECT id,
+               customer_name AS customerName,
+               phone
+        FROM t_customer
+    </select>
+    <select id="getOrders" resultType="linzi.mybatis.starter.bean.Order">
+        SELECT id,
+               address,
+               t_order.amount,
+               t_order.customer_id AS customerID
+        FROM t_order
+    </select>
+</mapper>
