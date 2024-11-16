@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="linzi.mybatis.starter.mapper.EmpReturnValuesMapper">
+
+    <!-- Select statement to count the number of employees -->
+    <select id="countEmp" resultType="java.lang.Long">
+        SELECT count(*)
+        from t_emp
+    </select>
+
+    <!-- Select statement to return a list of Employee objects -->
+    <select id="getEmpList" resultType="linzi.mybatis.starter.bean.Emp">
+        SELECT *
+        FROM t_emp
+        <!-- Ensure to specify the result type as the element type of the collection -->
+    </select>
+
+    <!-- Select statement to return all employees as a map -->
+    <select id="getAll" resultType="java.util.Map">
+        SELECT *
+        FROM t_emp;
+    </select>
+
+    <!-- Define a custom result map for Employee objects -->
+    <resultMap id="EmpRM" type="linzi.mybatis.starter.bean.Emp">
+        <!-- id, specifying the primary key mapping rule -->
+        <id column="id" property="id"/>
+        <!-- result, specifying the mapping rules for other class fields -->
+        <result column="age" property="age"/>
+        <result column="emp_salary" property="empSalary"/>
+        <result column="emp_name" property="empName"/>
+    </resultMap>
+
+    <!-- Select statement to get an Employee by ID using the custom result map -->
+    <select id="getEmpById" resultMap="EmpRM">
+        SELECT id,
+               age,
+               emp_salary,
+               emp_name
+        FROM t_emp
+        WHERE id = #{id}
+    </select>
+
+</mapper>

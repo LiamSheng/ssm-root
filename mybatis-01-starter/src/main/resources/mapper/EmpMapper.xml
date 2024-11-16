@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="linzi.mybatis.starter.mapper.EmpMapper">
+<!--namespace: 编写 mapper 接口的全类名, 代表这个 xml 文件与这个 mapper 接口绑定.-->
+<!--
+    Emp getEmpById(int id);
+    <select> 标签表示一次查询.
+        id: 绑定方法名.
+        resultType: 返回值类型
+-->
+    <select id="getEmpById" resultType="linzi.mybatis.starter.bean.Emp">
+        SELECT id,
+               age,
+               emp_name   AS empName,
+               emp_salary AS empSalary
+        FROM t_emp
+        WHERE id = #{id};
+    </select>
+
+    <!--
+        自增 id 回填机制:
+        useGeneratedKeys: 使用自生成的id.
+        keyProperty: 指定自动生成 id 对应的属性, 把自动生成的 id 封装到 Emp 对象的 id 属性中.
+    -->
+    <insert id="addEmp" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_emp(emp_name, age, emp_salary)
+        VALUES (#{empName}, #{age}, #{empSalary});
+    </insert>
+
+    <update id="updateEmp">
+        UPDATE t_emp
+        SET emp_name   = #{empName},
+            age        = #{age},
+            emp_salary = #{empSalary}
+        WHERE id = #{id};
+    </update>
+
+    <delete id="deleteEmpById">
+        DELETE
+        FROM t_emp
+        WHERE id = #{id};
+    </delete>
+
+<!--    返回的是集合, 但是返回类型仍然写对象类型.-->
+    <select id="getAllEmp" resultType="linzi.mybatis.starter.bean.Emp">
+        SELECT id,
+               age,
+               emp_name,
+               emp_salary
+        FROM t_emp
+    </select>
+</mapper>

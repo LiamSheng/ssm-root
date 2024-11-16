@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="linzi.mybatis.starter.mapper.EmpDynamicMapper">
+    <!--    where 标签版本.-->
+    <!--    <select id="selectEmpByNameAndSalary" resultType="linzi.mybatis.starter.bean.Emp">-->
+    <!--        SELECT *-->
+    <!--        FROM t_emp-->
+    <!--        <where>-->
+    <!--            <if test="name!=null">-->
+    <!--                emp_name=#{name}-->
+    <!--            </if>&lt;!&ndash; if 标签: 判断条件, test="[java代码]"&ndash;&gt;-->
+    <!--            <if test="salary!=null">-->
+    <!--                AND emp_salary=#{salary}-->
+    <!--            </if>-->
+    <!--        </where>-->
+    <!--    </select>-->
+
+    <!--    trim 标签版本.-->
+    <!--    <select id="selectEmpByNameAndSalary" resultType="linzi.mybatis.starter.bean.Emp">-->
+    <!--        SELECT *-->
+    <!--        FROM t_emp-->
+    <!--        # prefix: 如果标签体内有东西(两个if至少通过了一个), 才加上该内容-->
+    <!--        # prefixOverrides: 标签体内最终生成的字符串, 如果以prefix开始, 就覆盖为空串.-->
+    <!--        <trim prefix="WHERE" prefixOverrides="AND||OR">-->
+    <!--            <if test="name!=null">-->
+    <!--                emp_name=#{name}-->
+    <!--            </if>&lt;!&ndash; if 标签: 判断条件, test="[java代码]"&ndash;&gt;-->
+    <!--            <if test="salary!=null">-->
+    <!--                AND emp_salary=#{salary}-->
+    <!--            </if>-->
+    <!--        </trim>-->
+    <!--    </select>-->
+
+    <select id="selectEmpByNameAndSalary" resultType="linzi.mybatis.starter.bean.Emp">
+        SELECT *
+        FROM t_emp
+        <where>
+            <choose>
+                <when test="name!=null">
+                    emp_name=#{name}
+                </when>
+                <when test="salary>40000">
+                    emp_salary=#{salary}
+                </when>
+                <otherwise>
+                    id = 1
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <!--    <update id="updateEmp">-->
+    <!--        UPDATE t_emp-->
+    <!--        <set>-->
+    <!--            <if test="id != null and id != ''">-->
+    <!--                id = #{id},-->
+    <!--            </if>-->
+    <!--            <if test="empName != null and empName != ''">-->
+    <!--                emp_name = #{empName},-->
+    <!--            </if>-->
+    <!--            <if test="empSalary != null and empSalary != ''">-->
+    <!--                emp_salary = #{empSalary},-->
+    <!--            </if>-->
+    <!--            <if test="age != null and age != ''">-->
+    <!--                age = #{age},-->
+    <!--            </if>-->
+    <!--        </set>-->
+    <!--        WHERE id = #{id}-->
+    <!--    </update>-->
+    <update id="updateEmp">
+        UPDATE t_emp
+        <trim prefix="SET" suffix="WHERE id = #{id}" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                id = #{id},
+            </if>
+            <if test="empName != null and empName != ''">
+                emp_name = #{empName},
+            </if>
+            <if test="empSalary != null and empSalary != ''">
+                emp_salary = #{empSalary},
+            </if>
+            <if test="age != null and age != ''">
+                age = #{age}
+            </if>
+        </trim>
+    </update>
+    <select id="getAllEmpIn" resultType="linzi.mybatis.starter.bean.Emp">
+        <include refid="select_sql"/>
+        FROM t_emp
+        <if test="idList!=null">
+            <foreach collection="idList" item="id" separator="," open="WHERE id IN (" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </select>
+    <insert id="insertEmp">
+        <foreach collection="empList" item="emp" separator=","
+                 open="INSERT INTO t_emp(EMP_NAME, AGE, EMP_SALARY) VALUES">
+            (#{emp.empName}, #{emp.age}, #{emp.empSalary})
+        </foreach>
+    </insert>
+    <update id="updateEmpByList">
+        <foreach collection="empList" item="e" separator=";">
+            UPDATE t_emp
+            <set>
+                <if test="e.empName != null">
+                    emp_name = #{e.empName},
+                </if>
+                <if test="e.empSalary != null">
+                    emp_salary = #{e.empSalary},
+                </if>
+                <if test="e.age != null">
+                    age = #{e.age}
+                </if>
+            </set>
+            WHERE id = #{e.id}
+        </foreach>
+    </update>
+    <sql id="select_sql">
+        SELECT *
+    </sql>
+</mapper>

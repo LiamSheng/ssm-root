@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="linzi.mybatis.starter.mapper.CustomerMapper">
+
+    <resultMap id="CustomerRM" type="linzi.mybatis.starter.bean.Customer">
+        <id column="id" property="id"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="phone" property="phone"/>
+        <!-- collection 说明一对多的"多"那一方的封装规则, property="Customer 的属性名, 即 orders" -->
+        <collection property="orders" ofType="linzi.mybatis.starter.bean.Order">
+            <id column="id" property="id"/>
+            <result column="address" property="address"/>
+            <result column="amount" property="amount"/>
+            <result column="customer_id" property="customerId"/>
+        </collection>
+    </resultMap>
+    <select id="selectCustomerAndAllOrdersById" resultMap="CustomerRM">
+        SELECT c.*,
+               o.id AS order_id,
+               o.address,
+               o.amount,
+               o.customer_id
+        FROM t_customer c
+                 LEFT JOIN t_order o ON c.id = o.customer_id
+        WHERE c.id = #{id}
+    </select>
+</mapper>

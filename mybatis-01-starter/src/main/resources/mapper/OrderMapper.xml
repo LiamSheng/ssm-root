@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="linzi.mybatis.starter.mapper.OrderMapper">
+    <resultMap id="OrderRM" type="linzi.mybatis.starter.bean.Order">
+        <id column="id" property="id"/>
+        <result column="address" property="address"/>
+        <result column="amount" property="amount"/>
+        <result column="customer_id" property="customerId"/>
+        <association property="customer" javaType="linzi.mybatis.starter.bean.Customer">
+            <id column="c_id" property="id"/>
+            <result column="customer_name" property="customerName"/>
+            <result column="phone" property="phone"/>
+        </association>
+    </resultMap>
+    <select id="getOrderByIdWithCustomer" resultMap="OrderRM">
+        SELECT o.*,
+               c.id AS c_id,
+               c.customer_name,
+               c.phone
+        FROM t_order o
+                 LEFT JOIN t_customer c ON o.customer_id = c.id
+        WHERE o.id = #{id}
+    </select>
+</mapper>
